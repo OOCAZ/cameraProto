@@ -1,54 +1,22 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './src/components/Home';
+import Gallery from './src/components/Gallery';
+import Tester from './src/components/Tester';
 
-export default function App() {
-  const [cameraPermission, setCameraPermission] = useState<any>();
+const Stack = createNativeStackNavigator();
 
-  useEffect(() => {
-    (async () => {
-      const cameraPermissionStatus = await Camera.requestCameraPermission();
-      setCameraPermission(cameraPermissionStatus);
-    })();
-  }, []);
-
-  console.log(`Camera permission status: ${cameraPermission}`);
-
-  const devices = useCameraDevices();
-  const cameraDevice = devices.back;
-  const camera = useRef<Camera>(null);
-
-  const renderDetectorContent = () => {
-    if (cameraDevice && cameraPermission === 'authorized') {
-      return (
-        <View>
-          <Camera
-            style={{height: 400, width: 200}}
-            ref={camera}
-            device={cameraDevice}
-            isActive={true}
-            photo={true}
-          />
-          <Text>Wow There is a camera here!</Text>
-        </View>
-      );
-    }
-    return <ActivityIndicator size="large" color="#1C6758" />;
-  };
-
+const MyStack = () => {
   return (
-    <View>
-      <SafeAreaView>
-        <View>
-          <Text>React Native Image Detector</Text>
-        </View>
-      </SafeAreaView>
-
-      <View>
-        <Text>Welcome To React-Native-Vision-Camera Tutorial</Text>
-      </View>
-
-      {renderDetectorContent()}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Gallery" component={Gallery} />
+        <Stack.Screen name="Tester" component={Tester} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
+
+export default MyStack;
